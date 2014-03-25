@@ -100,49 +100,52 @@ var GridMainRight = new sap.ui.layout.GridData("GridMainRight",{spanLarge:6,span
 var GridRight = new sap.ui.layout.Grid("GridRight",{});
 GridRight.setLayoutData(GridMainRight);
 GridMain.addContent(GridRight);
-var GridUserMenuHeader = new sap.ui.layout.GridData("GridUserMenuHeader",{spanLarge:12,spanMedium:12,spanSmall:12});
-var FormUserMenu = new sap.ui.layout.form.SimpleForm("FormUserMenu",{});
-FormUserMenu.setLayoutData(GridUserMenuHeader);
-GridRight.addContent(FormUserMenu);
-var TitleUserMenu = new sap.ui.core.Title("TitleUserMenu",{text:"Projects"});
-FormUserMenu.addContent(TitleUserMenu);
+
 
 //PROJECTS
-var projects = [
-	{icon:"sap-icon://group", text:"Openui5-cards", url:"http://elsewhat.github.io/openui5-cards/"},
-	{icon:"sap-icon://group", text:"Openui5-spritz-reader", url:"https://github.com/elsewhat/openui5-spritz-reader"},
-	{icon:"sap-icon://group", text:"Narwhal TV for reddit - Android app", url:"https://play.google.com/store/apps/details?id=org.elsewhat.reddit"},
-	{icon:"sap-icon://group", text:"Photo Voyages of Trey - Android app", url:"https://play.google.com/store/apps/details?id=com.stuckincustoms.slideshow"},
-];
+var projects = 
+	[
+		{isHeader:true},
+		{icon:"sap-icon://group", text:"Openui5-cards", url:"http://elsewhat.github.io/openui5-cards/"},
+		{icon:"sap-icon://group", text:"Openui5-spritz-reader", url:"https://github.com/elsewhat/openui5-spritz-reader"},
+		{icon:"sap-icon://group", text:"Narwhal TV for reddit - Android app", url:"https://play.google.com/store/apps/details?id=org.elsewhat.reddit"},
+		{icon:"sap-icon://group", text:"Photo Voyages of Trey - Android app", url:"https://play.google.com/store/apps/details?id=com.stuckincustoms.slideshow"},
+	];
+var projectsModel = new sap.ui.model.json.JSONModel(projects);
 
-for(var i=0;i<projects.length;i++){
-	var project = projects[i];
 
+var projectFactory = function(sId, oContext) { 
+	if(oContext.getModel().getProperty(oContext.sPath+"/isHeader")){
+		var GridUserMenuHeader = new sap.ui.layout.GridData("GridUserMenuHeader",{spanLarge:12,spanMedium:12,spanSmall:12});
+		var FormUserMenu = new sap.ui.layout.form.SimpleForm("FormUserMenu",{});
+		FormUserMenu.setLayoutData(GridUserMenuHeader);
+		var TitleUserMenu = new sap.ui.core.Title("TitleUserMenu",{text:"Projects"});
+		FormUserMenu.addContent(TitleUserMenu);
+		return FormUserMenu;
+	}
 	var GridProject = new sap.ui.layout.GridData({spanLarge:12,spanMedium:12,spanSmall:12});
-	var ListItemProject = new sap.m.ObjectListItem({type:"Navigation",title:project.text,icon:project.icon});
+	var ListItemProject = new sap.m.ObjectListItem({
+		type:"Navigation",
+		press : function(oEvent) {
+			window.location.href=oContext.getModel().getProperty(oContext.sPath+"/url");
+			}
+		})
+		.bindProperty("title", oContext.sPath+"/text")
+		.bindProperty("icon", oContext.sPath+"/icon");
+
 	ListItemProject.setLayoutData(GridProject);
-	GridRight.addContent(ListItemProject);
+	return ListItemProject;
 }
 
-
+GridRight.setModel(projectsModel);
+GridRight.bindAggregation("content","/", projectFactory); 
 
 $(document).ready(function()
 {
 	BarPageHeader.addStyleClass("headerBar");
 	GridMain.addStyleClass("mainGrid");
 });
-$( window ).resize(function()
-{
-setTileContainerHeight();
-}
-);
-function setTileContainerHeight()
-{
-	var pageHeight = $('#Page').height();
-	var barHeight = $('#BarPageHeader').height();
-	var TileContainerHeight = pageHeight - barHeight;
-	TileContainer.setHeight(TileContainerHeight + "px");
-}
+
 </script>
 <body class="sapUiBody" id="body"><div id="MobileContent"></div>
 
