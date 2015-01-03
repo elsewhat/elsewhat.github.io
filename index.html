@@ -95,12 +95,29 @@ for(var i=0;i<onlinePresence.length;i++){
 
 
 
-//PROJECTS HEADER
+//PROJECTS
 var GridMainRight = new sap.ui.layout.GridData("GridMainRight",{spanLarge:6,spanMedium:6,spanSmall:6});
 var GridRight = new sap.ui.layout.Grid("GridRight",{});
 GridRight.setLayoutData(GridMainRight);
 GridMain.addContent(GridRight);
 
+/*
+var githubApiElsewhat="https://api.github.com/users/elsewhat/repos?sort=updated";
+var oModel = new sap.ui.model.json.JSONModel(githubApiElsewhat);
+
+ 
+var cardFactory = function(sId, oContext) { 
+    var oCard = new open.m.Card(sId)
+        .bindProperty("subtitle", oContext.sPath+"/description") 
+        .bindProperty("titleLink", oContext.sPath+"/html_url")
+        .bindProperty("title", oContext.sPath+"/name",function(name){
+                return "<strong>"+ name+ "</strong>";
+            }
+        );
+
+
+    return oCard;
+};*/
 
 //PROJECTS
 var projects = 
@@ -114,7 +131,8 @@ var projects =
 var projectsModel = new sap.ui.model.json.JSONModel(projects);
 
 
-var projectFactory = function(sId, oContext) { 
+var projectFactory = function(sId, oContext) {
+	//hack to get header 
 	if(oContext.getModel().getProperty(oContext.sPath+"/isHeader")){
 		var GridUserMenuHeader = new sap.ui.layout.GridData("GridUserMenuHeader",{spanLarge:12,spanMedium:12,spanSmall:12});
 		var FormUserMenu = new sap.ui.layout.form.SimpleForm("FormUserMenu",{});
@@ -123,6 +141,7 @@ var projectFactory = function(sId, oContext) {
 		FormUserMenu.addContent(TitleUserMenu);
 		return FormUserMenu;
 	}
+	//Actual entry pr project
 	var GridProject = new sap.ui.layout.GridData({spanLarge:12,spanMedium:12,spanSmall:12});
 	var ListItemProject = new sap.m.ObjectListItem({
 		type:"Navigation",

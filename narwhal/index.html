@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+  <head>
+<style type="text/css">
+  @import url(http://fonts.googleapis.com/css?family=Droid+Serif:400,700);
+  body {
+    font-family: "Droid Serif", serif;
+    color: #444;
+    line-height: 150%;
+    border: 0px;
+    margin: 0px;
+    width: 100%;
+    height: 100%;
+    overflow: hidden !important;
+  }
+  video {
+    width: 100%;
+    height: 100%;
+    margin: auto auto;
+    overflow: hidden !important;
+  }
+</style>
+<!--
+Include the Receiver Library - Very important use our URL, don't attempt to
+host this yourself.
+-->
+<script type="text/javascript"
+    src="//www.gstatic.com/cast/sdk/libs/receiver/2.0.0/cast_receiver.js">
+</script>
+    <title>Narwhal TV</title>
+  </head>
+  <body>Narwhal TV
+    <video id='vid' />
+<script type="text/javascript">
+var narwhalMessageNamespace="urn:x-cast:org.elsewhat.narwhal"
+
+// Turn on debugging so that you can see what is going on.  Please turn this off
+// on your production receivers to improve performance.
+cast.receiver.logger.setLevelValue(cast.receiver.LoggerLevel.DEBUG);
+
+// Start the receiver SDK.
+console.log('Application is ready, starting system');
+window.castReceiverManager = cast.receiver.CastReceiverManager.getInstance();
+
+window.messageBus = window.castReceiverManager.getCastMessageBus(narwhalMessageNamespace);
+
+window.messageBus.onMessage = function(event) {
+    console.log("### Message Bus - Media Message: " + JSON.stringify(event));
+
+    console.log("### CUSTOM MESSAGE: " + JSON.stringify(event));
+}
+
+
+castReceiverManager.onSenderDisconnected = function (event) {
+  console.log("sender disconnected");
+  if(window.castReceiverManager.getSenders().length == 0 &&
+    event.reason == cast.receiver.system.DisconnectReason.REQUESTED_BY_SENDER) {
+      window.close();
+  }
+};
+
+window.castReceiverManager.onSenderConnected = function(event) {
+    console.log("### Cast Receiver Manager - Sender Connected : " + JSON.stringify(event));
+
+    var senders = window.castReceiverManager.getSenders();
+    console.log("session count "+ senders.length);
+};
+
+
+window.castReceiverManager.start();
+
+</script>
+  </body>
+</html>
