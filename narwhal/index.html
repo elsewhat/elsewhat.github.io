@@ -69,7 +69,7 @@ window.messageBus.onMessage = function(event) {
       player.loadVideoById(videoId,0,"highres");
 
     } catch (ex){
-      console.log("Got exception on parsing event.data "+event.data);
+      console.log("Got exception while attempting to play video with data "+event.data);
     } 
   
 }
@@ -94,8 +94,8 @@ window.castReceiverManager.onSenderConnected = function(event) {
 //YOUTUBE LOGIC
 function onYouTubeIframeAPIReady() {
       player = new YT.Player('player', {
-      height: 562,
-      width: 1000,
+      height: screen.availHeight,
+      width: screen.availWidth,
       playerVars: { 
           'autoplay': 0, 
           'controls': 0 },
