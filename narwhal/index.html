@@ -32,6 +32,22 @@ host this yourself.
   <body>Narwhal TV
     <video id='vid' />
 <script type="text/javascript">
+window.addEventListener('load', function() {
+  //Add youtube element
+  console.log("Setting up youtube player");
+  var tag = document.createElement('script');
+  tag.src = "https://www.youtube.com/iframe_api";
+  var firstScriptTag = document.getElementsByTagName('script')[0];
+  firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+
+  //Start receiving events
+  console.log('Application is ready, starting system');
+  window.castReceiverManager.start();
+
+});
+
+
+//CHROMECAST LOGIC
 var narwhalMessageNamespace="urn:x-cast:org.elsewhat.narwhal"
 
 // Turn on debugging so that you can see what is going on.  Please turn this off
@@ -39,15 +55,24 @@ var narwhalMessageNamespace="urn:x-cast:org.elsewhat.narwhal"
 cast.receiver.logger.setLevelValue(cast.receiver.LoggerLevel.DEBUG);
 
 // Start the receiver SDK.
-console.log('Application is ready, starting system');
+
 window.castReceiverManager = cast.receiver.CastReceiverManager.getInstance();
 
 window.messageBus = window.castReceiverManager.getCastMessageBus(narwhalMessageNamespace);
 
 window.messageBus.onMessage = function(event) {
-    console.log("### Message Bus - Media Message: " + JSON.stringify(event));
+    console.log("### Message Bus - Message: " + JSON.stringify(event));
+    try{
+      var msgData =  JSON.parse(event.data);
+      var videoId= msgData.data.videoId;
+      console.log("About to play video with id "+ videoId);
 
-    console.log("### CUSTOM MESSAGE: " + JSON.stringify(event));
+      player.loadVideoById(videoId,0,"highres");
+
+    } catch (ex){
+      console.log("Got exception on parsing event.data "+event.data);
+    } 
+  
 }
 
 
@@ -67,7 +92,32 @@ window.castReceiverManager.onSenderConnected = function(event) {
 };
 
 
-window.castReceiverManager.start();
+//YOUTUBE LOGIC
+function onYouTubeIframeAPIReady() {
+      player = new YT.Player('player', {
+      height: 562,
+      width: 1000,
+      playerVars: { 
+          'autoplay': 0, 
+          'controls': 0 },
+        events: {
+          'onReady': onPlayerReady,
+          'onStateChange': onPlayerStateChange
+        }
+      });
+}
+
+function onPlayerReady() {
+  //channel.send({'event':'iframeApiReady','message':'ready'});
+}
+
+function onPlayerStateChange(event) {
+  //channel.send({'event':'stateChange','message':event.data});
+  //if (event.data==YT.PlayerState.ENDED) {
+  //  endcast();
+  //}
+}
+
 
 </script>
   </body>
