@@ -3,4 +3,4 @@ name: Elsewhat gamers
 url: "https://www.elsewhat.com"
 
 # Build settings
-remote_theme: Gridster
+remote_theme: "daattali/beautiful-jekyll"
