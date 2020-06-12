@@ -1,7 +1,7 @@
 site: Elsewhat gamers
 
 url: http://www.elsewhat.com
-baseurl: http://www.elsewhat.com
+baseurl: 
 
 collections:
   pages:
