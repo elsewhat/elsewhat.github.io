@@ -1,0 +1,6 @@
+# General
+name: Elsewhat gamers
+url: "https://www.elsewhat.com"
+
+# Build settings
+remote_theme: DigitalMindCH/gridster-jekyll-theme
