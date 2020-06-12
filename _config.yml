@@ -1,7 +1,7 @@
-site: Journal Jekyll Theme
+site: Elsewhat gamers
 
-url: 
-baseurl: 
+url: http://www.elsewhat.com
+baseurl: http://www.elsewhat.com
 
 collections:
   pages:
