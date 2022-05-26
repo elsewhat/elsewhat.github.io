@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <title>Murder mystery</title>
+  <script>
+    var roles = ["Murder", "Sheriff", "Innocent", "Innocent","Innocent"]; 
+    var index = 0
+    function drawMurderMystery() {
+      //alert(roles[index]);
+      if (roles[index]=="Murder"){
+        document.getElementById("display").src="https://i.imgur.com/Do1jNeR.png"
+      } else if (roles[index]=="Sheriff"){
+        document.getElementById("display").src="https://i.imgur.com/zHCyTJy.png"
+      } else {
+        document.getElementById("display").src="https://i.imgur.com/4f8tUU4.jpg"
+      }
+      
+      document.getElementById("drawButton").disabled=true
+      setTimeout(incrementToNextPlayer, 3000); 
+    }
+    
+    function incrementToNextPlayer(){
+      document.getElementById("display").src="https://i.imgur.com/NvbPTO5.jpg";
+      
+      if (index<roles.length-1){
+        index++;
+        document.getElementById("drawButton").disabled=false;
+        document.getElementById("playerNr").innerHTML="Player number #" + (index+1) + " of " +roles.length;
+      }else {
+        document.getElementById("playerNr").innerHTML="Ready to start";
+        document.getElementById("resetButton").disabled=false
+        document.getElementById("drawButton").disabled=true
+      }
+      
+    }
+    
+    function reset (){
+        index=0
+        shuffle(roles)
+        document.getElementById("resetButton").disabled=true
+        document.getElementById("drawButton").disabled=false
+        document.getElementById("display").src="https://i.imgur.com/NvbPTO5.jpg"
+        document.getElementById("playerNr").innerHTML="Player number #" + (index+1) + " of " + roles.length;
+    }
+    
+    function shuffle(array) {
+      let currentIndex = array.length,  randomIndex;
+
+      // While there remain elements to shuffle.
+      while (currentIndex != 0) {
+
+        // Pick a remaining element.
+        randomIndex = Math.floor(Math.random() * currentIndex);
+        currentIndex--;
+
+        // And swap it with the current element.
+        [array[currentIndex], array[randomIndex]] = [
+          array[randomIndex], array[currentIndex]];
+      }
+
+      return array;
+  }
+
+  </script>
+</head>
+<p id="playerNr"></p> 
+  
+<body>
+  <img id="display" src="https://i.imgur.com/NvbPTO5.jpg" style="max-height:400px"/>
+<p><button id="drawButton" onclick="drawMurderMystery()">Who am I</button>
+  
+  
+<p>  
+<button id="resetButton" onclick="reset()">Reset</button>
+</body>
+</html>
